@@ -507,11 +507,11 @@ exit
 # download https://nubeusc-my.sharepoint.com/:u:/g/personal/tf_pena_usc_es/EdOWbXgGW61KsMcnaiqrmNsBiDM-p4uwq13JdMFhS4ZEjQ?e=SjvZzd
 docker container cp libros.tar namenode:/tmp
 docker container exec -ti namenode /bin/bash
-su - hdadmin
+su - luser
 cd /tmp; tar xvf libros.tar
 hdfs dfs -put libros .
 hdfs dfs -ls libros
 rm -rf /tmp/libros
 exit
 rm /tmp/libros.tar
-# http://localhost:9870/explorer.html#/user/hdadmin/libros
+# http://localhost:9870/explorer.html#/user/luser/libros
