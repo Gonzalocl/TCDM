@@ -223,3 +223,31 @@ echo '  <property>
   </property>
 
 </configuration>' >> "$HADOOP_HOME/etc/hadoop/$hadoop_conf_file"
+
+hdfs namenode -format
+ls /var/data/hdfs/namenode
+ls $HADOOP_HOME/logs
+hdfs --daemon start namenode
+cat $HADOOP_HOME/logs/*
+jps
+yarn --daemon start resourcemanager
+cat $HADOOP_HOME/logs/*
+jps
+# http://localhost:9870
+# http://localhost:8088
+yarn --daemon stop resourcemanager
+hdfs --daemon stop namenode
+exit
+echo '#!/bin/bash
+export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64
+export HADOOP_HOME=/opt/bd/hadoop
+# Inicio el NameNode y el ResourceManager
+su hdadmin -c "$HADOOP_HOME/bin/hdfs --daemon start namenode"
+su hdadmin -c "$HADOOP_HOME/bin/yarn --daemon start resourcemanager"
+# Lazo para mantener activo el contenedor
+while true; do sleep 10000; done' > /inicio.sh
+chmod +x /inicio.sh
+exit
+docker container commit namenode namenode-image
+docker images
+docker container rm namenode
