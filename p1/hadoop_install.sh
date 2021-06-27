@@ -470,4 +470,48 @@ exit
 docker container commit datanode datanode-image
 docker images
 docker container rm datanode
-
+docker container run -d --name namenode --network=hadoop-cluster --hostname namenode --net-alias resourcemanager --cpus=1 --memory=1024m \
+--expose 8000-10000 -p 9870:9870 -p 8088:8088 namenode-image /inicio.sh
+for i in {1..4}; do docker container run -d --name datanode$i --network=hadoop-cluster --hostname datanode$i \
+--cpus=1 --memory=1024m --expose 8000-10000 --expose 50000-50200 datanode-image /inicio.sh; done
+docker container ps
+docker container exec -ti namenode /bin/bash
+su - hdadmin
+hdfs dfsadmin -report
+yarn node -list
+# http://localhost:9870
+# http://localhost:8088
+exit
+exit
+docker container stop namenode datanode{1..4}
+docker container start namenode datanode{1..4}
+docker container exec -ti namenode /bin/bash
+su - hdadmin
+hdfs dfs -mkdir -p /user/hdadmin
+hdfs dfs -mkdir -p /user/luser
+hdfs dfs -chown luser /user/luser
+hdfs dfs -ls /user
+hdfs dfs -mkdir -p /tmp/hadoop-yarn/staging
+hdfs dfs -chmod -R 1777 /tmp
+exit
+su - luser
+echo '
+export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64
+export HADOOP_HOME=/opt/bd/hadoop
+export PATH=$PATH:$HADOOP_HOME/bin
+' >> ~/.bashrc
+. ~/.bashrc
+hdfs dfs -ls
+exit
+exit
+# download https://nubeusc-my.sharepoint.com/:u:/g/personal/tf_pena_usc_es/EdOWbXgGW61KsMcnaiqrmNsBiDM-p4uwq13JdMFhS4ZEjQ?e=SjvZzd
+docker container cp libros.tar namenode:/tmp
+docker container exec -ti namenode /bin/bash
+su - hdadmin
+cd /tmp; tar xvf libros.tar
+hdfs dfs -put libros .
+hdfs dfs -ls libros
+rm -rf /tmp/libros
+exit
+rm /tmp/libros.tar
+# http://localhost:9870/explorer.html#/user/hdadmin/libros
