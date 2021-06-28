@@ -112,6 +112,3 @@ yarn jar $MAPRED_EXAMPLES/hadoop-mapreduce-examples-*.jar pi 16 1000
 exit
 exit
 # close terminal
-
-exit
-exit

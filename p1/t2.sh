@@ -63,3 +63,26 @@ cat hadoop/logs/hadoop-hdadmin-namenode-namenode.log
 # screenshot
 cat hadoop/logs/hadoop-hdadmin-resourcemanager-namenode.log
 # screenshot
+
+echo "datanode5" >> ${HADOOP_HOME}/etc/hadoop/yarn.include
+yarn rmadmin -refreshNodes
+# new terminal
+docker container run -d --name datanode5 --network=hadoop-cluster --hostname datanode5 --cpus=1 --memory=3072m \
+  --expose 8000-10000 --expose 50000-50200 datanode-image /inicio.sh
+# previous terminal
+hdfs dfsadmin -report
+# screenshot
+yarn node -list
+# screenshot
+echo "datanode5" >> ${HADOOP_HOME}/etc/hadoop/dfs.include
+hdfs dfsadmin -refreshNodes
+hdfs dfsadmin -report
+# screenshot
+yarn node -list
+# screenshot
+# http://localhost:8088/cluster/nodes
+# screenshot
+# http://localhost:9870/dfshealth.html#tab-datanode
+# screenshot
+hdfs balancer
+# screenshot
