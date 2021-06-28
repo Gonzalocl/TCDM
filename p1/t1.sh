@@ -13,7 +13,7 @@ chown -R hdadmin backup
 su - hdadmin
 
 hadoop_conf_backup_folder="hadoop_conf_backup"
-mkdir "$hadoop_conf_backup_folder"
+mkdir -p "$hadoop_conf_backup_folder"
 
 hadoop_conf_file="core-site.xml"
 cp "$HADOOP_HOME/etc/hadoop/$hadoop_conf_file" "$hadoop_conf_backup_folder"
@@ -66,3 +66,52 @@ exit
 exit
 exit
 
+docker container exec -ti namenode /bin/bash
+su - hdadmin
+yarn --daemon stop resourcemanager
+hadoop_conf_backup_folder="hadoop_conf_backup"
+mkdir -p "$hadoop_conf_backup_folder"
+
+hadoop_conf_file="yarn-site.xml"
+cp "$HADOOP_HOME/etc/hadoop/$hadoop_conf_file" "$hadoop_conf_backup_folder"
+head -n -1 "$hadoop_conf_backup_folder/$hadoop_conf_file" > "$HADOOP_HOME/etc/hadoop/$hadoop_conf_file"
+echo '  <property>
+    <name>yarn.timeline-service.hostname</name>
+    <value>timelineserver</value>
+    <final>true</final>
+  </property>
+  <property>
+    <name>yarn.timeline-service.enabled</name>
+    <value>true</value>
+    <final>true</final>
+  </property>
+  <property>
+    <name>yarn.system-metrics-publisher.enabled</name>
+    <value>true</value>
+    <final>true</final>
+  </property>
+</configuration>' >> "$HADOOP_HOME/etc/hadoop/$hadoop_conf_file"
+
+yarn --daemon start resourcemanager
+exit
+exit
+docker container run -ti --name timelineserver --network=hadoop-cluster --hostname timelineserver --cpus=1 --memory=3072m --expose 10200 -p 8188:8188 hadoop-base /bin/bash
+su - hdadmin
+yarn --daemon start timelineserver
+# http://localhost:8188/
+# screenshot
+
+# new terminal
+docker container exec -ti namenode /bin/bash
+su - hdadmin
+export MAPRED_EXAMPLES=$HADOOP_HOME/share/hadoop/mapreduce
+yarn jar $MAPRED_EXAMPLES/hadoop-mapreduce-examples-*.jar pi 16 1000
+# screenshot
+yarn jar $MAPRED_EXAMPLES/hadoop-mapreduce-examples-*.jar pi 16 1000
+# screenshot
+exit
+exit
+# close terminal
+
+exit
+exit
