@@ -1,4 +1,6 @@
 
+# Not intended to be run as scripts if not running each command one by one
+
 docker container run -ti --name "hadoop-install" ubuntu:latest /bin/bash
 apt-get update
 DEBIAN_FRONTEND=noninteractive apt-get install -y tzdata && ln -fs /usr/share/zoneinfo/Europe/Madrid /etc/localtime && dpkg-reconfigure --frontend noninteractive tzdata
@@ -470,10 +472,10 @@ exit
 docker container commit datanode datanode-image
 docker images
 docker container rm datanode
-docker container run -d --name namenode --network=hadoop-cluster --hostname namenode --net-alias resourcemanager --cpus=1 --memory=1024m \
+docker container run -d --name namenode --network=hadoop-cluster --hostname namenode --net-alias resourcemanager --cpus=1 --memory=3072m \
 --expose 8000-10000 -p 9870:9870 -p 8088:8088 namenode-image /inicio.sh
 for i in {1..4}; do docker container run -d --name datanode$i --network=hadoop-cluster --hostname datanode$i \
---cpus=1 --memory=1024m --expose 8000-10000 --expose 50000-50200 datanode-image /inicio.sh; done
+--cpus=1 --memory=3072m --expose 8000-10000 --expose 50000-50200 datanode-image /inicio.sh; done
 docker container ps
 docker container exec -ti namenode /bin/bash
 su - hdadmin
@@ -515,3 +517,23 @@ rm -rf /tmp/libros
 exit
 rm /tmp/libros.tar
 # http://localhost:9870/explorer.html#/user/luser/libros
+su - hdadmin
+export MAPRED_EXAMPLES=$HADOOP_HOME/share/hadoop/mapreduce
+yarn jar $MAPRED_EXAMPLES/hadoop-mapreduce-examples-*.jar pi 16 1000
+# http://localhost:8088
+exit
+exit
+# download https://nubeusc-my.sharepoint.com/:u:/g/personal/tf_pena_usc_es/Ef2hV1-OwM9AkZaDpL7FXjkBbQ1a7SnH-_XdUn1UGg8rPg?e=zEBrej
+docker cp wordcount.tgz namenode:/home/luser
+docker container exec -ti namenode /bin/bash
+su - luser
+cd; tar xvzf wordcount.tgz
+cd wordcount
+mvn package
+yarn jar target/wordcount*.jar libros/p* wordcount-out
+# http://localhost:8088
+hdfs dfs -get wordcount-out
+ls wordcount-out
+exit
+exit
+docker container stop namenode datanode{1..4}
