@@ -86,3 +86,5 @@ yarn node -list
 # screenshot
 hdfs balancer
 # screenshot
+exit
+exit
