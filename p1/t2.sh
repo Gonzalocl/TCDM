@@ -18,8 +18,6 @@ datanode2
 datanode3
 datanode4" > ${HADOOP_HOME}/etc/hadoop/yarn.include
 
-#next
-
 hadoop_conf_backup_folder="hadoop_conf_backup"
 mkdir -p "$hadoop_conf_backup_folder"
 
