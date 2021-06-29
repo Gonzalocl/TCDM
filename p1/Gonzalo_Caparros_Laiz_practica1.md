@@ -284,7 +284,7 @@ En la siguiente captura se ve en las líneas del log del namenode que se han inc
 En la siguiente captura se ve en las líneas del log del resourcemanager que se han incluido los ficheros.  
 ![](img/img012.png)
 
-A continuación se añade "datanode5" a la lista de nodos incluidos, se recarga la configuración del resourcemanager con `yarn rmadmin -refreshNodes` y se inicia un el nodo con el comando:
+A continuación se añade "datanode5" a la lista de nodos incluidos, se recarga la configuración del resourcemanager con `yarn rmadmin -refreshNodes` y se inicia un nodo con el comando:
 
 ```bash
 echo "datanode5" >> ${HADOOP_HOME}/etc/hadoop/yarn.include
@@ -356,7 +356,7 @@ docker container stop namenode datanode4
 
 ```
 
-Para finalizar pongo en los ficheros `dfs.include` y `yarn.include` solo los nodos que están activos y dejo lso ficheros `dfs.exclude` y `yarn.exclude` vacíos.
+Para finalizar pongo en los ficheros `dfs.include` y `yarn.include` solo los nodos que están activos y dejo los ficheros `dfs.exclude` y `yarn.exclude` vacíos.
 Recargo la configuración para que los demonios tengan constancia.
 
 ```bash
@@ -430,7 +430,7 @@ Doy permisos de ejecución al script.
 chmod +x $HADOOP_HOME/etc/hadoop/topology.script
 ```
 
-Añado a al fichero `core-site.xml` la propiedad net.topology.script.file.name para indicar donde se encuentra el script que hace el mapeo.
+Añado a al fichero `core-site.xml` la propiedad `net.topology.script.file.name` para indicar donde se encuentra el script que hace el mapeo.
 
 Por último inicio de nuevo el demonio del namenode y muestro la topología.
 
