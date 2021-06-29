@@ -45,7 +45,7 @@ public class CopyHalfFile {
 			fin.seek(fileSize/2);
 
 			// TODO: Copiar del InputStream al OutputStream
-			IOUtils.copyBytes(fin, fout, conf, false)
+			IOUtils.copyBytes(fin, fout, conf, false);
 
 		} finally {
 			// TODO: Cerrar los streams
