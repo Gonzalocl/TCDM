@@ -112,7 +112,7 @@ hdfs dfs -cat out.txt
 El resultado de la ejecución se puede ver en la siguiente captura.  
 ![](img/img013.png)
 
-# Probar el comandos hdfs dfsadmin
+# Probar el comando hdfs dfsadmin
 
 Para realizar esta parte se siguen los siguientes pasos:
 
@@ -144,7 +144,7 @@ El resultado de la ejecución se puede ver en la siguiente captura.
 
 Como se puede ver en el resultado de la ejecución, al intentar crear el cuarto fichero da error de límite de cuota, lo cual se puede ver al final al mostrar los contenidos de la carpeta que solo se han creado 3 ficheros.
 
-Como se estableció una cuota de límite 4 parece extraño que solo se puedan crear 3 ficheros, la respuesta es que la misma carpeta también cuenta para el agotar límite de la cuota.
+Como se estableció una cuota de límite 4 parece extraño que solo se puedan crear 3 ficheros, la respuesta es que la misma carpeta también cuenta para agotar límite de la cuota.
 Como se indica en la [documentación de hadoop](https://hadoop.apache.org/docs/current/hadoop-project-dist/hadoop-hdfs/HdfsQuotaAdminGuide.html#Name_Quotas).
 
 > [...]
