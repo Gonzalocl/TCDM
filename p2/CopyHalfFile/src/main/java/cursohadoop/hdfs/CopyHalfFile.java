@@ -39,7 +39,7 @@ public class CopyHalfFile {
 
 			// TODO: Abrir los FSDataInputStream y FSDataOutputStream
 			fin = fsin.open(pathin);
-			fout = fsout.open(pathout);
+			fout = fsout.create(pathout);
 
 			// TODO: Saltar a la mitad de InputStream de entrada
 			fin.seek(fileSize/2);
