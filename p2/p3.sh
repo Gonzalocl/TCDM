@@ -3,10 +3,10 @@
 
 docker container exec -ti namenode /bin/bash
 su - hdadmin
-echo something > one_file
 hdfs dfs -mkdir quota
 hdfs dfsadmin -setQuota 4 quota
 hdfs dfs -ls quota
+echo something > one_file
 hdfs dfs -put one_file quota/file_0
 hdfs dfs -put one_file quota/file_1
 hdfs dfs -put one_file quota/file_2
