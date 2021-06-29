@@ -34,15 +34,19 @@ public class CopyHalfFile {
 		
 		try {
 			// TODO: Crear un FileStatus del filesystem de entrada a partir del cual obtener la longitud
-
+			FileStatus fileStatus = fsin.getFileStatus(pathin);
+			long fileSize = fileStatus.getLen();
 
 			// TODO: Abrir los FSDataInputStream y FSDataOutputStream
 			fin = fsin.open(pathin);
 			fout = fsout.open(pathout);
 
 			// TODO: Saltar a la mitad de InputStream de entrada
-			
+			fin.seek(fileSize/2);
+
 			// TODO: Copiar del InputStream al OutputStream
+			IOUtils.copyBytes(fin, fout, conf, false)
+
 		} finally {
 			// TODO: Cerrar los streams
 			IOUtils.closeStream(fin);
