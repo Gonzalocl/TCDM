@@ -452,4 +452,4 @@ Adjunto los ficheros:
 - `t3.sh`: Los comandos usados para hacer la tarea 3.
 - `t4.sh`: Los comandos usados para hacer la tarea 4.
 
-Los ficheros no estan pensados para ser ejecutados en batch sino copiando y pegando cada uno de los comandos.
+Los ficheros no están pensados para ser ejecutados en batch sino copiando y pegando cada uno de los comandos.
