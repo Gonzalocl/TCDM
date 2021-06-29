@@ -10,7 +10,7 @@ chown -R luser:luser /home/luser/CopyHalfFile
 su - luser
 cd CopyHalfFile
 mvn package
-cd target; hadoop jar hdfs-0.0.1-SNAPSHOT.jar text_file.txt out.txt
+cd target; hadoop jar hdfs-0.0.1-SNAPSHOT.jar text_file0.txt out0.txt
 hdfs dfs -cat out.txt
 exit
 exit
