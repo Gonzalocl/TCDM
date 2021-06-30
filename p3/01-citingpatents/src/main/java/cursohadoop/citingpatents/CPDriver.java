@@ -62,7 +62,7 @@ public class CPDriver extends Configured implements Tool {
 
 		// TODO: Modifica el parámetro para indicar que el caracter separador entre clave y 
 		// valor en el fichero de entrada es una coma (ver más abajo)
-		conf.set("", ",");
+		conf.set("mapreduce.input.keyvaluelinerecordreader.key.value.separator", ",");
 		
 		/* Obtiene un job a partir de la configuración actual */
 		Job job = Job.getInstance(conf);
@@ -72,12 +72,12 @@ public class CPDriver extends Configured implements Tool {
 		job.setJarByClass(getClass());
 		
 		//TODO: Añade al job los paths de entrada y salida
-		.addInputPath(job, new Path(arg0[0]));
-		.setOutputPath(job, new Path(arg0[1]));
+		KeyValueTextInputFormat.addInputPath(job, new Path(arg0[0]));
+		TextOutputFormat.setOutputPath(job, new Path(arg0[1]));
 		
 		// TODO: Fijamos la compresión
-		FileOutputFormat.(job, true);
-		FileOutputFormat.(job, GzipCodec.class);
+		FileOutputFormat.setCompressOutput(job, true);
+		FileOutputFormat.setOutputCompressorClass(job, GzipCodec.class);
 		
 		// TODO:
 		// Fija el formato de los ficheros de entrada y salida 
@@ -92,25 +92,25 @@ public class CPDriver extends Configured implements Tool {
 		//   TextOutputFormat - Escribe cada registro como una línea de texto. Claves y valores se escriben como strings separadas
 		//                      por \t (separador especificable mediante mapred.textoutputformat.separator)
 		//
-		job.setInputFormatClass(    );
-		job.setOutputFormatClass(   );
+		job.setInputFormatClass(KeyValueTextInputFormat.class);
+		job.setOutputFormatClass(TextOutputFormat.class);
 
 		// TODO: Especifica el tipo de la clave y el valor de salida del mapper
 		// No es necesario si los tipos son iguales a los tipos de la salida 
-		job.setMapOutputKeyClass(        );
-		job.setMapOutputValueClass(      );
+		job.setMapOutputKeyClass(Text.class);
+		job.setMapOutputValueClass(Text.class);
 		
 		// TODO: Especifica el tipo de la clave y el valor de salida final (del reducer)
-		job.setOutputKeyClass(      );
-		job.setOutputValueClass(    );
+		job.setOutputKeyClass(Text.class);
+		job.setOutputValueClass(Text.class);
 		
 		// TODO: Especifica el número de reducers
 		job.setNumReduceTasks(4);
 
 		// Especifica el mapper, el combiner y el reducer
-		job.setMapperClass(    );
-		job.setCombinerClass(    );
-		job.setReducerClass(    );
+		job.setMapperClass(CPMapper.class);
+		job.setCombinerClass(CPReducer.class);
+		job.setReducerClass(CPReducer.class);
 
 		
 		return job.waitForCompletion(true) ? 0 : 1;
