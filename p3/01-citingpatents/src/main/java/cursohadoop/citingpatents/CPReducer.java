@@ -9,7 +9,7 @@ import org.apache.hadoop.io.Text;
 import java.io.IOException;
 
 
-public class CPReducer extends Reducer<  > {
+public class CPReducer extends Reducer<Text, Text, Text, Text> {
 	/**
 	 * Método reduce
 	 * @param key Patente citada
@@ -20,10 +20,16 @@ public class CPReducer extends Reducer<  > {
 	 */
 	// TODO: Completar el reducer
 	@Override
-	public void reduce(  ) throws IOException, InterruptedException {
+	public void reduce(Text key, Iterable<Text> values, Context context) throws IOException, InterruptedException {
 		// TODO: Completad el reducer
 
-		context.write(key, );
+		String resultValues = "";
+
+		for (Text value: values) {
+			resultValues += value.toString();
+		}
+
+		context.write(key, new Text(resultValues));
 	}
 
 }

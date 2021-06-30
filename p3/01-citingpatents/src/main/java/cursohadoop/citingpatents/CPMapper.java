@@ -21,7 +21,7 @@ public class CPMapper extends Mapper<Text, Text, Text, Text> {
 	 */
 	// TODO: Completar el mapper
 	@Override
-	public void map(Text key, Text value, Context ctx) throws IOException, InterruptedException {
-		ctx.write(value, key);
+	public void map(Text key, Text value, Context context) throws IOException, InterruptedException {
+		context.write(value, key);
 	}
 }
