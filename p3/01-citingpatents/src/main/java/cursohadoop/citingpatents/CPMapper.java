@@ -8,7 +8,7 @@ import org.apache.hadoop.mapreduce.Mapper;
 import org.apache.hadoop.io.Text;
 import java.io.IOException;
 
-public class CPMapper extends Mapper<  > {
+public class CPMapper extends Mapper<Text, Text, Text, Text> {
 	/*
 	 * Método map
 	 * @param key patente que cita
@@ -21,8 +21,7 @@ public class CPMapper extends Mapper<  > {
 	 */
 	// TODO: Completar el mapper
 	@Override
-	public void map(  ) throws IOException,
-			InterruptedException {
-		
+	public void map(Text key, Text value, Context ctx) throws IOException, InterruptedException {
+		ctx.write(value, key);
 	}
 }
