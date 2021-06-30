@@ -7,6 +7,7 @@ package cursohadoop.citingpatents;
 import org.apache.hadoop.mapreduce.Reducer;
 import org.apache.hadoop.io.Text;
 import java.io.IOException;
+import java.util.Iterator;
 
 
 public class CPReducer extends Reducer<Text, Text, Text, Text> {
@@ -23,17 +24,20 @@ public class CPReducer extends Reducer<Text, Text, Text, Text> {
 	public void reduce(Text key, Iterable<Text> values, Context context) throws IOException, InterruptedException {
 		// TODO: Completad el reducer
 
-		if (key.toString().equals("CITED")) {
+		if (key.toString().equals("\"CITED\"")) {
 			return;
 		}
 
-		String resultValues = "";
+		StringBuilder resultValues = new StringBuilder();
+		Iterator<Text> it = values.iterator();
 
-		for (Text value: values) {
-			resultValues += "," + value.toString();
+		resultValues.append(it.next().toString());
+
+		while (it.hasNext()) {
+			resultValues.append(",").append(it.next().toString());
 		}
 
-		context.write(key, new Text(resultValues));
+		context.write(key, new Text(resultValues.toString()));
 	}
 
 }
