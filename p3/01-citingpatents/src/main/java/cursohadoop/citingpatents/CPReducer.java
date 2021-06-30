@@ -23,10 +23,14 @@ public class CPReducer extends Reducer<Text, Text, Text, Text> {
 	public void reduce(Text key, Iterable<Text> values, Context context) throws IOException, InterruptedException {
 		// TODO: Completad el reducer
 
+		if (key.toString().equals("CITED")) {
+			return;
+		}
+
 		String resultValues = "";
 
 		for (Text value: values) {
-			resultValues += value.toString();
+			resultValues += "," + value.toString();
 		}
 
 		context.write(key, new Text(resultValues));
