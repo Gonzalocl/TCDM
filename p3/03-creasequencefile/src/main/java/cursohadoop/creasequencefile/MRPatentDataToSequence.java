@@ -90,7 +90,7 @@ public class MRPatentDataToSequence extends Configured implements Tool {
         Text patenteanho = new Text(fields[0] + "," + fields[1]);
         // TODO: Completa la alida del mapper.
         // countryInfo es un Map que nos devuelve el nombre del país a partir de su código.
-        context.write(pais, patenteanho);
+        context.write(countryInfo.get(pais), patenteanho);
       }
     }
 
