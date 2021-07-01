@@ -73,7 +73,6 @@ public class MRPatentDataToSequence extends Configured implements Tool {
       Configuration conf = context.getConfiguration();
       Path ccPath = new Path(Job.getInstance(conf).getCacheFiles()[0].getPath());
       String ccFileName = ccPath.toString();
-      System.err.printf("[[[[%s]]]]", ccFileName);
       parseCCFile(ccFileName);
     }
 
@@ -82,16 +81,16 @@ public class MRPatentDataToSequence extends Configured implements Tool {
     protected void map(LongWritable key, Text value, Context context)
         throws IOException, InterruptedException {
       // TODO: El if debe ser cierto excepto para la primera línea
-      if ( > bytes_primera_linea) {
+      if (key.get() > bytes_primera_linea) {
         // Separamos la linea en campos
-        String[] fields = .split(",");
+        String[] fields = value.toString().split(",");
         // Escribimos el pais (eliminando las comillas)
         Text pais = new Text(fields[4].replace("\"", ""));
         // Escribimos la patente y el anho
-        Text patenteanho = (fields[0] + "," + fields[1]);
+        Text patenteanho = new Text(fields[0] + "," + fields[1]);
         // TODO: Completa la alida del mapper.
         // countryInfo es un Map que nos devuelve el nombre del país a partir de su código.
-        context.write(countryInfo.get(pais), );
+        context.write(pais, patenteanho);
       }
     }
 
