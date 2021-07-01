@@ -23,6 +23,15 @@ cd 02-citationnumberbypatent_chained
 rm -rf out02; hdfs dfs -rm -r -f out02
 mvn package
 export HADOOP_CLASSPATH="./src/resources/citingpatents-0.0.1-SNAPSHOT.jar"
-yarn jar target/citationnumberbypatent_chained-0.0.1-SNAPSHOT.jar -libjars $HADOOP_CLASSPATH patentes/cite75_99.txt out02
+yarn jar target/citationnumberbypatent_chained-0.0.1-SNAPSHOT.jar -Dmapred.job.queue.name=urgent -libjars $HADOOP_CLASSPATH patentes/cite75_99.txt out02
 hdfs dfs -get out02
+```
+
+```bash
+module load maven
+cd 03-creasequencefile
+rm -rf out03; hdfs dfs -rm -r -f out03
+mvn package
+yarn jar target/creasequencefile-0.0.1-SNAPSHOT.jar -Dmapred.job.queue.name=urgent -files ../patentes/country_codes.txt patentes/apat63_99.txt out03
+hsfs dfs -text out03/part-m-*
 ```
