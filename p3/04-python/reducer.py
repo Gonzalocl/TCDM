@@ -1,6 +1,5 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python
 import sys
 
 for line in sys.stdin:
-    (key, value) = line.strip().split()
-    print('{}\t{}'.format(key, value))
+    print('{}\t{}'.format(0, line.strip()))
