@@ -1,6 +1,10 @@
 package cursohadoop.creasequencefile;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.conf.Configured;
@@ -37,19 +41,19 @@ public class MRPatentDataToSequence extends Configured implements Tool {
     job.setJobName("Crea fichero sequence");
 
     //TODO: Especifica el formato de la entrada y la salida
-    job.setInputFormatClass(   );
-    job.setOutputFormatClass(   );
+    job.setInputFormatClass(TextInputFormat.class);
+    job.setOutputFormatClass(SequenceFileOutputFormat.class);
 
     //TODO: Especifica los tipos de salida del mapper y final
-    job.setMapOutputKeyClass(   );
-    job.setMapOutputValueClass(   );
-    job.setOutputKeyClass(   );
-    job.setOutputValueClass(   );
+    job.setMapOutputKeyClass(Text.class);
+    job.setMapOutputValueClass(Text.class);
+    job.setOutputKeyClass(Text.class);
+    job.setOutputValueClass(Text.class);
 
     job.setMapperClass(MRPatentDataToSequenceMapper.class);
 
     //TODO: Especifica 0 tareas reduce
-    job.;
+    job.setNumReduceTasks(0);
 
     return job.waitForCompletion(true) ? 0 : 1;
   }
@@ -67,14 +71,15 @@ public class MRPatentDataToSequence extends Configured implements Tool {
     public void setup(Context context) throws IOException,
         InterruptedException {
       Configuration conf = context.getConfiguration();
-      Path ccPath = new Path(Job..getPath(     ));
-      String ccFileName = ccPath..toString();
+      Path ccPath = new Path(Job.getInstance(conf).getCacheFiles()[0].getPath());
+      String ccFileName = ccPath.toString();
+      System.err.printf("[[[[%s]]]]", ccFileName);
       parseCCFile(ccFileName);
     }
 
     // TODO: Completar el mapper
     @Override
-    protected void map( key,  value,  context)
+    protected void map(LongWritable key, Text value, Context context)
         throws IOException, InterruptedException {
       // TODO: El if debe ser cierto excepto para la primera línea
       if ( > bytes_primera_linea) {
