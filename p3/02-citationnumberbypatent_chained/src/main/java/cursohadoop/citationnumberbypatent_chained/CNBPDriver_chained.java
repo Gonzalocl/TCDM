@@ -52,9 +52,10 @@ public class CNBPDriver_chained extends Configured implements Tool {
 		}
 
 		//TODO: Obtiene la configuración por defecto y modifica el sepoarador clave valor
-		Configuration conf = getConf();		
-		conf.set();
-		
+		Configuration conf = getConf();
+		conf.set("mapreduce.input.keyvaluelinerecordreader.key.value.separator", ",");
+		conf.set("mapred.textoutputformat.separator", ",");
+
 		/* Define el job */
 		Job job = Job.getInstance(conf);
 		job.setJobName("Trabajo encadenado");
@@ -63,19 +64,27 @@ public class CNBPDriver_chained extends Configured implements Tool {
 		job.setJarByClass(getClass());
 
 		//TODO Añade al job los paths de entrada y salida 
+		KeyValueTextInputFormat.addInputPath(job, new Path(arg0[0]));
+		TextOutputFormat.setOutputPath(job, new Path(arg0[1]));
 
 		//TODO Fija el formato de los ficheros de entrada y salida 
 
 		
 		//TODO: Especifica el primer mapper 
 		/* El booleano (true) especifica si los datos en la cadena se pasan por valor (true) o referencia (false) */
-		ChainMapper.addMapper(, new Configuration(false));
+		ChainMapper.addMapper(job, CPMapper.class,
+				Text.class, Text.class, Text.class, Text.class,
+				new Configuration(false));
 		
 		//TODO: Añade el reducer 
-		ChainReducer.setReducer(, new Configuration(false));
+		ChainReducer.setReducer(job, CPReducer.class,
+				Text.class, Text.class, Text.class, Text.class,
+				new Configuration(false));
 		
 		//TODO: Los siguientes mapper se concatenan al reducer 
-		ChainReducer.addMapper(, new Configuration(false));
+		ChainReducer.addMapper(job, CCMapper.class,
+				Text.class, Text.class, Text.class, Text.class,
+				new Configuration(false));
 
 		return job.waitForCompletion(true) ? 0 : 1;
 	}
