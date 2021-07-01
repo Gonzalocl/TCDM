@@ -1,7 +1,7 @@
 package cursohadoop.citationnumberbypatent_chained;
 
 /**
- * Mapper Count Cites 
+ * Mapper Count Cites
  * Para cada línea, obtiene la clave (patente) y cuenta el número de patentes que la citan
  */
 import java.io.IOException;
@@ -17,6 +17,6 @@ public class CCMapper extends Mapper<Text, Text, Text, IntWritable> {
 	public void map(Text key, Text value, Context ctxt)
 			throws IOException, InterruptedException {
 
-		ctxt.write();
+		ctxt.write(key, new IntWritable(value.toString().split(",").length));
 	}
 }
