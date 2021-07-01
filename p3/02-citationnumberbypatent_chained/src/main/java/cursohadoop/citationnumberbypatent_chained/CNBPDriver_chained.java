@@ -3,14 +3,14 @@ package cursohadoop.citationnumberbypatent_chained;
 /**
  *  CNBP_a - cites number by patent: Obtiene el número de citas de una patente 
  *     Combina mapper | reducer | mapper
- *     
+ *
  *  	mapper1 -> CPMapper (práctica 01-citingpatents)
  *                Para cada línea, invierte las columnas (patente citada, patente que cita)
  *      reducer -> CPReducer(práctica 01-citingpatents)
  *     		  Para cada línea, obtiene la clave (patente) y une en un string las patentes que la citan
  *      mapper2 -> CCMapper
  *     		  De la salida del reducer, para cada patente cuenta el número de patentes que la citan
- *      
+ *
  */
 
 import org.apache.hadoop.conf.Configuration;
@@ -34,14 +34,14 @@ import cursohadoop.citingpatents.CPReducer;
 public class CNBPDriver_chained extends Configured implements Tool {
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.apache.hadoop.util.Tool#run(java.lang.String[])
 	 */
 	@Override
 	public int run(String[] arg0) throws Exception {
 
 		/*
-		 * Comprueba los parámetros de entrada  
+		 * Comprueba los parámetros de entrada
 		 */
 		if (arg0.length != 2) {
 			System.err.printf("Usar: %s [opciones genéricas] <directorio_entrada> <directorio_salida>%n",
@@ -68,19 +68,20 @@ public class CNBPDriver_chained extends Configured implements Tool {
 		TextOutputFormat.setOutputPath(job, new Path(arg0[1]));
 
 		//TODO Fija el formato de los ficheros de entrada y salida 
+		job.setInputFormatClass(KeyValueTextInputFormat.class);
+		job.setOutputFormatClass(TextOutputFormat.class);
 
-		
 		//TODO: Especifica el primer mapper 
 		/* El booleano (true) especifica si los datos en la cadena se pasan por valor (true) o referencia (false) */
 		ChainMapper.addMapper(job, CPMapper.class,
 				Text.class, Text.class, Text.class, Text.class,
 				new Configuration(false));
-		
+
 		//TODO: Añade el reducer 
 		ChainReducer.setReducer(job, CPReducer.class,
 				Text.class, Text.class, Text.class, Text.class,
 				new Configuration(false));
-		
+
 		//TODO: Los siguientes mapper se concatenan al reducer 
 		ChainReducer.addMapper(job, CCMapper.class,
 				Text.class, Text.class, Text.class, Text.class,
@@ -91,7 +92,7 @@ public class CNBPDriver_chained extends Configured implements Tool {
 
 	/**
 	 * Usar yarn jar CitationNumberByPatent_chained.jar dir_entrada dir_salida
-	 * 
+	 *
 	 * @param args
 	 *            dir_entrada dir_salida
 	 * @throws Exception
