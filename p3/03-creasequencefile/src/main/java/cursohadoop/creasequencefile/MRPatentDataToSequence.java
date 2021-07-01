@@ -72,7 +72,7 @@ public class MRPatentDataToSequence extends Configured implements Tool {
         InterruptedException {
       Configuration conf = context.getConfiguration();
       Path ccPath = new Path(Job.getInstance(conf).getCacheFiles()[0].getPath());
-      String ccFileName = ccPath.toUri().toString();
+      String ccFileName = ccPath.getName();
       parseCCFile(ccFileName);
     }
 
