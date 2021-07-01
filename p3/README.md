@@ -35,3 +35,18 @@ mvn package
 yarn jar target/creasequencefile-0.0.1-SNAPSHOT.jar -Dmapred.job.queue.name=urgent -files ../patentes/country_codes.txt patentes/apat63_99.txt out03
 hdfs dfs -text out03/part-m-* > out03
 ```
+
+```bash
+cd 04-python
+rm -rf out04; hdfs dfs -rm -r -f out04
+yarn jar \
+  /opt/cloudera/parcels/CDH-6.1.1-1.cdh6.1.1.p0.875250/lib/hadoop-mapreduce/hadoop-streaming.jar \
+  -D mapred.job.queue.name=urgent \
+  -D mapreduce.job.reduces=2 \
+  -files mapper.py,reducer.py \
+  -input patentes/apat63_99.txt \
+  -output out04 \
+  -mapper mapper.py \
+  -reducer reducer.py
+hdfs dfs -get out04
+```
