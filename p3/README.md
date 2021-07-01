@@ -33,5 +33,5 @@ cd 03-creasequencefile
 rm -rf out03; hdfs dfs -rm -r -f out03
 mvn package
 yarn jar target/creasequencefile-0.0.1-SNAPSHOT.jar -Dmapred.job.queue.name=urgent -files ../patentes/country_codes.txt patentes/apat63_99.txt out03
-hsfs dfs -text out03/part-m-*
+hdfs dfs -text out03/part-m-* > out03
 ```
