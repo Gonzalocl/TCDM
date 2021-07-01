@@ -9,7 +9,7 @@ for line in sys.stdin:
 
     key_value = line[:-1].split('\t')
     key = key_value[0]
-    value = int(key_value[1]) if key_value[1].isnumeric() else 0
+    value = int(key_value[1]) if key_value[1].isdigit() else 0
 
     if last_key and last_key != key:
 
