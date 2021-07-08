@@ -23,5 +23,13 @@ def main():
 
     cite.groupBy('CITED').count().selectExpr('CITED as NPatente', 'count as ncitas').show()
 
+    apat = spark\
+        .read\
+        .option('inferSchema', 'true')\
+        .option('header', 'true')\
+        .csv(sys.argv[2])
+
+    apat.selectExpr('PATENT as NPatente', 'COUNTRY as Pais', 'GYEAR as Anho').show()
+
 if __name__ == '__main__':
     main()
