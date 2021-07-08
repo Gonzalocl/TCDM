@@ -21,7 +21,14 @@ def main():
         .option('header', 'true')\
         .csv(sys.argv[1])
 
-    cite.groupBy('CITED').count().selectExpr('CITED as NPatente', 'count as ncitas').show()
+    cite = cite.groupBy('CITED')\
+        .count()\
+        .selectExpr('CITED as NPatente', 'count as ncitas')
+
+    cite.write.format('parquet')\
+        .mode('overwrite')\
+        .option('compression', 'gzip')\
+        .save(sys.argv[3])
 
     apat = spark\
         .read\
@@ -29,7 +36,14 @@ def main():
         .option('header', 'true')\
         .csv(sys.argv[2])
 
-    apat.selectExpr('PATENT as NPatente', 'COUNTRY as Pais', 'GYEAR as Anho').show()
+    apat = apat.selectExpr('PATENT as NPatente',
+                           'COUNTRY as Pais',
+                           'GYEAR as Anho')
+
+    apat.write.format('parquet') \
+        .mode('overwrite') \
+        .option('compression', 'gzip') \
+        .save(sys.argv[4])
 
 if __name__ == '__main__':
     main()
