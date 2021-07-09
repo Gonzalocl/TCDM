@@ -70,6 +70,8 @@ def main():
             (code, country) = country_code.strip().split('\t')
             country_codes[code] = country
 
+    ccb = spark.sparkContext.broadcast(country_codes)
+
     data = cite.join(apat, 'NPatente', 'inner')
 
     aggregates = data.groupBy(['Pais', 'Anho']).agg(F.count(data.NPatente).alias('NumPatentes'),
@@ -77,7 +79,8 @@ def main():
                                                     F.avg(data.ncitas).alias('MediaCitas'),
                                                     F.max(data.ncitas).alias('MaxCitas'))
 
-    aggregates = aggregates.withColumn('Pais', F.udf(lambda x: country_codes[x])(aggregates.Pais))
+    aggregates = aggregates.withColumn('Pais', F.udf(lambda x: ccb.value.get(x))(aggregates.Pais))
+    aggregates = aggregates.sort(aggregates.Pais, aggregates.Anho)
 
     aggregates.show()
 
