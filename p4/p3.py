@@ -43,8 +43,8 @@ def main():
     sc = spark.sparkContext
 
     apat = sc.textFile(sys.argv[1], 8)
-    print(apat.take(20))
-    print(apat.getNumPartitions())
+    country_year = apat.map(lambda x: (x.split(',')[1], x.split(',')[4][1:-1]))
+    print(country_year.collect())
 
 if __name__ == '__main__':
     main()
