@@ -8,6 +8,7 @@ import sys
 Para ejecutar este este script en local uso el siguiente comando,
 los ficheros de datos deben de estar descomprimidos en la misma
 carpeta que el script.
+
 spark-submit \
   --master local[*] \
   --num-executors 4 \
@@ -21,8 +22,9 @@ spark-submit \
 
 '''
 Para ejecutar este script en YARN uso el siguiente comando,
-los fichero sde datos deben de estar descomprimidos y en HDFS en
+los ficheros de datos deben de estar descomprimidos y en HDFS en
 la carpeta patentes.
+
 spark-submit \
   --master yarn \
   --num-executors 8 \
@@ -36,6 +38,7 @@ spark-submit \
 '''
 
 def main():
+
     if len(sys.argv) != 5:
         print('Usar: {} cite75_99.txt apat63_99.txt dfCitas.parquet dfInfo.parquet'.format(sys.argv[0]))
         exit(-1)

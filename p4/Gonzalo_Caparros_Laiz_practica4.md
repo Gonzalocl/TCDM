@@ -35,3 +35,16 @@ spark-submit \
 hdfs dfs -ls dfInfo.parquet | head
 hdfs dfs -ls dfCitas.parquet | head
 ```
+
+```bash
+spark-submit \
+  --master yarn \
+  --num-executors 8 \
+  --driver-memory 4g \
+  --queue urgent \
+  p2.py \
+  dfCitas.parquet \
+  dfInfo.parquet \
+  country_codes.txt \
+  p2out
+```
