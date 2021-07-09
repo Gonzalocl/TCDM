@@ -42,6 +42,7 @@ spark-submit \
   --num-executors 8 \
   --driver-memory 4g \
   --queue urgent \
+  --files country_codes.txt \
   p2.py \
   dfCitas.parquet \
   dfInfo.parquet \
