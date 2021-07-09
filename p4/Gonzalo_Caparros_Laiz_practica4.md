@@ -37,7 +37,7 @@ hdfs dfs -ls dfCitas.parquet | head
 ```
 
 ```bash
-rm -rf p2out; hdfs dfs -rm -r -f p2out
+rm -rf p2out; hdfs dfs -rm -r -f -skipTrash p2out
 
 spark-submit \
   --master yarn \
