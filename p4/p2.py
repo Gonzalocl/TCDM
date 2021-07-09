@@ -1,7 +1,10 @@
 #!/bin/env python2
 
 from __future__ import print_function, division
+
+from pyspark import SparkFiles
 from pyspark.sql import SparkSession
+import pyspark.sql.functions as F
 import sys
 
 '''
@@ -12,6 +15,7 @@ spark-submit \
   --master local[*] \
   --num-executors 4 \
   --driver-memory 4g \
+  --files country_codes.txt \
   p2.py \
   dfCitas.parquet \
   dfInfo.parquet \
@@ -29,6 +33,7 @@ spark-submit \
   --num-executors 8 \
   --driver-memory 4g \
   --queue urgent \
+  --files country_codes.txt \
   p2.py \
   dfCitas.parquet \
   dfInfo.parquet \
@@ -56,6 +61,25 @@ def main():
         .format('parquet') \
         .option('mode', 'FAILFAST') \
         .load(sys.argv[2])
+
+    country_codes_path = SparkFiles.get(sys.argv[3])
+    country_codes = {}
+
+    with open(country_codes_path) as country_codes_file:
+        for country_code in country_codes_file.readlines():
+            (code, country) = country_code.strip().split('\t')
+            country_codes[code] = country
+
+    data = cite.join(apat, 'NPatente', 'inner')
+
+    aggregates = data.groupBy(['Pais', 'Anho']).agg(F.count(data.NPatente).alias('NumPatentes'),
+                                                    F.sum(data.ncitas).alias('TotalCitas'),
+                                                    F.avg(data.ncitas).alias('MediaCitas'),
+                                                    F.max(data.ncitas).alias('MaxCitas'))
+
+    aggregates = aggregates.withColumn('Pais', F.udf(lambda x: country_codes[x])(aggregates.Pais))
+
+    aggregates.show()
 
 if __name__ == '__main__':
     main()
