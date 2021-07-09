@@ -37,6 +37,8 @@ hdfs dfs -ls dfCitas.parquet | head
 ```
 
 ```bash
+rm -rf p2out; hdfs dfs -rm -r -f p2out
+
 spark-submit \
   --master yarn \
   --num-executors 8 \
@@ -48,4 +50,7 @@ spark-submit \
   dfInfo.parquet \
   country_codes.txt \
   p2out
+
+hdfs dfs -get p2out
+cat p2out/* | head
 ```

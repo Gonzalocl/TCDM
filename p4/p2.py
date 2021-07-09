@@ -84,7 +84,7 @@ def main():
     aggregates = aggregates.withColumn('Pais', F.udf(lambda x: ccb.value.get(x))(aggregates.Pais))
     aggregates = aggregates.sort(aggregates.Pais, aggregates.Anho)
 
-    aggregates.show()
+    aggregates.write.csv(sys.argv[4], header=True)
 
 if __name__ == '__main__':
     main()
