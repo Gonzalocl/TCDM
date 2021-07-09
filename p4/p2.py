@@ -2,6 +2,8 @@
 
 from __future__ import print_function, division
 
+import os.path
+
 from pyspark import SparkFiles
 from pyspark.sql import SparkSession
 import pyspark.sql.functions as F
@@ -62,7 +64,7 @@ def main():
         .option('mode', 'FAILFAST') \
         .load(sys.argv[2])
 
-    country_codes_path = SparkFiles.get(sys.argv[3])
+    country_codes_path = os.path.basename(SparkFiles.get(sys.argv[3]))
     country_codes = {}
 
     with open(country_codes_path) as country_codes_file:
