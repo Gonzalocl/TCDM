@@ -10,7 +10,7 @@ import pyspark.sql.functions as F
 import sys
 
 '''
-Para ejecutar este este script en local uso el siguiente comando,
+Para ejecutar este script en local uso el siguiente comando,
 los ficheros de datos deben de en la misma carpeta que el script.
 
 spark-submit \

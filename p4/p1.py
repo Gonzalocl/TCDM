@@ -5,7 +5,7 @@ from pyspark.sql import SparkSession
 import sys
 
 '''
-Para ejecutar este este script en local uso el siguiente comando,
+Para ejecutar este script en local uso el siguiente comando,
 los ficheros de datos deben de estar descomprimidos en la misma
 carpeta que el script.
 
