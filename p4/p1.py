@@ -4,24 +4,36 @@ from __future__ import print_function, division
 from pyspark.sql import SparkSession
 import sys
 
-# Para ejecutar este este script en local uso el siguiente comando,
-# los ficheros de datos deben de estar descomprimidos en la misma
-# carpeta que el script.
-# spark-submit --master local[*] --num-executors 4 --driver-memory 4g p1.py cite75_99.txt apat63_99.txt dfCitas.parquet dfInfo.parquet
+'''
+Para ejecutar este este script en local uso el siguiente comando,
+los ficheros de datos deben de estar descomprimidos en la misma
+carpeta que el script.
+spark-submit \
+  --master local[*] \
+  --num-executors 4 \
+  --driver-memory 4g \
+  p1.py \
+  cite75_99.txt \
+  apat63_99.txt \
+  dfCitas.parquet \
+  dfInfo.parquet
+'''
 
-# Para ejecutar este script en YARN uso el siguiente comando,
-# los fichero sde datos deben de estar descomprimidos y en HDFS en
-# la carpeta patentes.
-# spark-submit \
-#   --master yarn \
-#   --num-executors 8 \
-#   --driver-memory 4g \
-#   --queue urgent \
-#   p1.py \
-#   patentes/cite75_99.txt \
-#   patentes/apat63_99.txt \
-#   dfCitas.parquet \
-#   dfInfo.parquet
+'''
+Para ejecutar este script en YARN uso el siguiente comando,
+los fichero sde datos deben de estar descomprimidos y en HDFS en
+la carpeta patentes.
+spark-submit \
+  --master yarn \
+  --num-executors 8 \
+  --driver-memory 4g \
+  --queue urgent \
+  p1.py \
+  patentes/cite75_99.txt \
+  patentes/apat63_99.txt \
+  dfCitas.parquet \
+  dfInfo.parquet
+'''
 
 def main():
     if len(sys.argv) != 5:
