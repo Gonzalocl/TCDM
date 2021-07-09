@@ -46,6 +46,8 @@ def main():
         .option('compression', 'gzip') \
         .save(sys.argv[3])
 
+    print('Numero de particiones de cite: {}'.format(cite.rdd.getNumPartitions()))
+
     apat = spark \
         .read \
         .option('inferSchema', 'true') \
@@ -60,6 +62,8 @@ def main():
         .mode('overwrite') \
         .option('compression', 'gzip') \
         .save(sys.argv[4])
+
+    print('Numero de particiones de apat: {}'.format(apat.rdd.getNumPartitions()))
 
 if __name__ == '__main__':
     main()

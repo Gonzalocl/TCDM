@@ -30,3 +30,8 @@ spark-submit \
   dfCitas.parquet \
   dfInfo.parquet
 ```
+
+```bash
+hdfs dfs -ls dfInfo.parquet | head
+hdfs dfs -ls dfCitas.parquet | head
+```
