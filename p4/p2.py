@@ -45,5 +45,17 @@ def main():
     spark = SparkSession.builder.appName('Practica 2 de Gonzalo').getOrCreate()
     spark.sparkContext.setLogLevel('FATAL')
 
+    cite = spark \
+        .read \
+        .format('parquet') \
+        .option('mode', 'FAILFAST') \
+        .load(sys.argv[1])
+
+    apat = spark \
+        .read \
+        .format('parquet') \
+        .option('mode', 'FAILFAST') \
+        .load(sys.argv[2])
+
 if __name__ == '__main__':
     main()
