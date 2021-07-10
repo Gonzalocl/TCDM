@@ -3,6 +3,7 @@
 from __future__ import print_function, division
 
 from pyspark.sql import SparkSession
+from collections import defaultdict
 import sys
 
 '''
@@ -32,6 +33,12 @@ spark-submit \
   p3out
 '''
 
+def count_years(years):
+    years_count = defaultdict(int)
+    for year in years:
+        years_count[year] += 1
+    return list(sorted(years_count.items()))
+
 def main():
 
     if len(sys.argv) != 3:
@@ -43,8 +50,8 @@ def main():
     sc = spark.sparkContext
 
     apat = sc.textFile(sys.argv[1], 8)
-    country_year = apat.map(lambda x: (x.split(',')[1], x.split(',')[4][1:-1]))
-    print(country_year.collect())
+    country_year = apat.map(lambda x: (x.split(',')[4][1:-1], x.split(',')[1]))
+    print(country_year.groupByKey().mapValues(count_years).collect())
 
 if __name__ == '__main__':
     main()
