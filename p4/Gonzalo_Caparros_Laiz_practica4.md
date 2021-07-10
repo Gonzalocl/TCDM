@@ -11,7 +11,7 @@ lang: es
 
 # Tarea 1: Extraer información
 
-En primer lugar la preparación de todas las tareas de esta práctica, copio los ficheros de datos a HDFS con los siguientes comandos.
+En primer lugar para la preparación de todas las tareas de esta práctica, copio los ficheros de datos a HDFS con los siguientes comandos.
 
 ```bash
 # download patentes.tar.gz
@@ -40,7 +40,7 @@ apat = spark \
 ```
 
 A continuación con el método `selectExpr` me quedo con las columnas que me interesan y las renombro al nombre indicado.
-En el caso del dataframe `cite` primor agrupo las filas por la columna _CITED_ y cuento las filas de cada grupo.
+En el caso del dataframe `cite` primero agrupo las filas por la columna _CITED_ y cuento las filas de cada grupo.
 
 ```python
 cite = cite.groupBy('CITED') \
@@ -92,7 +92,7 @@ spark-submit \
 
 ![](img/img001.png)
 
-Con los siguientes comandos compruebo canutos ficheros se han generado en los directorios de salida.
+Con los siguientes comandos compruebo cuantos ficheros se han generado en los directorios de salida.
 
 ```bash
 hdfs dfs -ls dfInfo.parquet | head
@@ -125,8 +125,8 @@ apat = spark \
     .load(sys.argv[2])
 ```
 
-Después leo el fichero `country_codes.txt` con la correspondencia entre el código de pais y el nombre del país.
-Con la instrucción `spark.sparkContext.broadcast(country_codes)` indico que la el diccionario donde está almacenada la correspondencia es uan variable de broadcast.
+Después leo el fichero `country_codes.txt` con la correspondencia entre el código de país y el nombre del país.
+Con la instrucción `spark.sparkContext.broadcast(country_codes)` indico que el diccionario donde está almacenada la correspondencia es uan variable de broadcast.
 
 ```python
 country_codes_path = os.path.basename(SparkFiles.get(sys.argv[3]))
@@ -140,7 +140,7 @@ with open(country_codes_path) as country_codes_file:
 ccb = spark.sparkContext.broadcast(country_codes)
 ```
 
-A continuación hago el _join_ entre los dataframes `cite` y `apat`, le indico que lo haga en la columna `NPatente`, y con `inner` le indico que se quede solo con las filas que aparecen solo en ambos dataframes.
+A continuación hago el _join_ entre los dataframes `cite` y `apat`, le indico que lo haga en la columna `NPatente`, y con `inner` le indico que se quede solo con las filas que aparecen en ambos dataframes.
 Seguidamente agrupo las filas por las columnas `Pais` y `Anho` e indico que se calculen los agregados con el método `agg`.
 Además con el método `alias` le indico que renombre las columnas resultantes.
 
@@ -194,7 +194,7 @@ cat p2out/* | head
 # Tarea 3: Contar patentes usando RDDs 
 
 Para esta última tarea he hecho el script `p3.py`.
-Con la siguiente línea de código indico que se cree un RDD a partir del fichero un fichero de texto, con el segundo parámetro le indico que cree el RDD con 8 particiones.
+Con la siguiente línea de código indico que se cree un RDD a partir de un fichero de texto, con el segundo parámetro le indico que cree el RDD con 8 particiones.
 
 ```python
 apat = sc.textFile(sys.argv[1], 8)
@@ -208,7 +208,7 @@ En el campo 4 se le quitan el primer y último carácter que son comillas dobles
 country_year = apat.map(lambda x: (x.split(',')[4][1:-1], x.split(',')[1]))
 ```
 
-En la siguiente línea indigo que el RDD anterior se agrupe por clave y se aplique la función `count_years` a la lista de valores agrupados por la calve.
+En la siguiente línea indico que el RDD anterior se agrupe por clave y se aplique la función `count_years` a la lista de valores agrupados por la calve.
 La función `count_years` se explica más adelante.
 Al final se indica que el RDD resultante se ordene por clave, que en este caso es el código del país.
 
