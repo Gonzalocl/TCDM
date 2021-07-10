@@ -51,7 +51,8 @@ def main():
 
     apat = sc.textFile(sys.argv[1], 8)
     country_year = apat.map(lambda x: (x.split(',')[4][1:-1], x.split(',')[1]))
-    print(country_year.groupByKey().mapValues(count_years).collect())
+    patents_year = country_year.groupByKey().mapValues(count_years).sortByKey()
+    patents_year.saveAsTextFile(sys.argv[2])
 
 if __name__ == '__main__':
     main()
