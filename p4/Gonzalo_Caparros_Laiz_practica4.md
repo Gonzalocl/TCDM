@@ -108,7 +108,7 @@ Como podemos comprobar, comparando con la salida del script de esta tarea, se cr
 
 # Tarea 2: Contar patentes, total media máximo citas
 
-Para esta primera tarea he hecho el script `p2.py`.
+Para esta tarea he hecho el script `p2.py`.
 En este script en primer lugar leo los datos de salida de la tarea anterior con el siguiente código.
 
 ```python
@@ -193,6 +193,49 @@ cat p2out/* | head
 
 # Tarea 3: Contar patentes usando RDDs 
 
+Para esta última tarea he hecho el script `p3.py`.
+Con la siguiente línea de código indico que se cree un RDD a partir del fichero un fichero de texto, con el segundo parámetro le indico que cree el RDD con 8 particiones.
+
+```python
+apat = sc.textFile(sys.argv[1], 8)
+```
+
+Con la siguiente línea de código aplico una función a cada fila del RDD, el método `map` devolverá un RDD tipo clave valor.
+La función divide el texto de la fila y se queda con el campo 4 correspondiente al código de país y con el campo 1 correspondiente al año de la patente.
+En el campo 4 se le quitan el primer y último carácter que son comillas dobles que no son de utilidad una vez la información ya está en el RDD.
+
+```python
+country_year = apat.map(lambda x: (x.split(',')[4][1:-1], x.split(',')[1]))
+```
+
+En la siguiente línea indigo que el RDD anterior se agrupe por clave y se aplique la función `count_years` a la lista de valores agrupados por la calve.
+La función `count_years` se explica más adelante.
+Al final se indica que el RDD resultante se ordene por clave, que en este caso es el código del país.
+
+```python
+patents_year = country_year.groupByKey().mapValues(count_years).sortByKey()
+```
+
+La siguiente función toma por parámetro una lista de años y crea un diccionario donde se van contando cada uno de los años.
+Devuelve una lista ordenada de tuplas donde el primer elemento es el año y el segundo es el número de veces que se repite.
+
+```python
+def count_years(years):
+    years_count = defaultdict(int)
+    for year in years:
+        years_count[year] += 1
+    return list(sorted(years_count.items()))
+```
+
+Para terminar el RDD final se guarda en formato de texto plano sin compresión con la siguiente línea.
+
+```python
+patents_year.saveAsTextFile(sys.argv[2])
+```
+
+Para ejecutar esta tarea uso los siguientes comandos, en primer lugar se borran los directorios de salida y luego se ejecuta el comando `spark-submit`.
+Seguidamente se copian los resultados de HDFS a local y se muestra el principio.
+
 ```bash
 rm -rf p3out; hdfs dfs -rm -r -f -skipTrash p3out
 
@@ -208,3 +251,5 @@ spark-submit \
 hdfs dfs -get p3out
 cat p3out/* | head
 ```
+
+![](img/img004.png)
