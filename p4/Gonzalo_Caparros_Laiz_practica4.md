@@ -54,3 +54,19 @@ spark-submit \
 hdfs dfs -get p2out
 cat p2out/* | head
 ```
+
+```bash
+rm -rf p3out; hdfs dfs -rm -r -f -skipTrash p3out
+
+spark-submit \
+  --master yarn \
+  --num-executors 8 \
+  --driver-memory 4g \
+  --queue urgent \
+  p3.py \
+  patentes/apat63_99.txt \
+  p3out
+
+hdfs dfs -get p3out
+cat p3out/* | head
+```
